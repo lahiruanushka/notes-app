@@ -2,6 +2,8 @@
   import {ref} from "vue";
 
   const isModalOpen = ref(false);
+  const newNote = ref("");
+  const notes = ref([])
 
   const openModal = () => {
     isModalOpen.value = true;
@@ -10,6 +12,24 @@
   const closeModal = () => {
     isModalOpen.value = false;
   }
+
+function getRandomColor() {
+  const hue = Math.random() * 360;
+  const color = `hsl(${hue}, 100%, 75%)`;
+  return color;
+}
+
+  const addNote = () => {
+    notes.value.push({
+      id: Math.floor(Math.random() * 1000000),
+      text: newNote.value,
+      date: new Date(),
+      backgroundColor: getRandomColor()
+    });
+
+    isModalOpen.value = false;
+    newNote.value = "";
+  } 
 </script>
 
 <template>
@@ -22,11 +42,11 @@
       <div class="cards-container">
         <div class="card">
           <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
-          <p class="date"></p>
+          <p class="date">07/20/2022</p>
         </div>
                 <div class="card">
           <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
-          <p class="date"></p>
+          <p class="date">07/20/2022</p>
         </div>
       </div>
     </div>
@@ -34,8 +54,13 @@
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal">
         <h2>Create Note</h2>
-        <textarea placeholder="Enter your note here..." cols="30" rows="10"></textarea>
-        <button class="modal-button">Save</button>
+        <textarea 
+          placeholder="Enter your note here..." 
+          cols="30" 
+          rows="10"
+          v-model="newNote"
+          ></textarea>
+        <button class="modal-button" @click="addNote">Save</button>
         <button @click="closeModal" class="modal-button cancel-button">Cancel</button>
       </div>
     </div>

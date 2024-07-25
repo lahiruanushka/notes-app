@@ -3,7 +3,8 @@
 
   const isModalOpen = ref(false);
   const newNote = ref("");
-  const notes = ref([])
+  const notes = ref([]);
+  const errorMessage = ref("");
 
   const openModal = () => {
     isModalOpen.value = true;
@@ -11,6 +12,9 @@
 
   const closeModal = () => {
     isModalOpen.value = false;
+    newNote.value = "";
+    errorMessage.value = "";
+
   }
 
 function getRandomColor() {
@@ -20,6 +24,12 @@ function getRandomColor() {
 }
 
   const addNote = () => {
+
+    if(newNote.value.trim().length < 10){
+      errorMessage.value = "Note needs to be 10 characters or more!";
+      return;
+    }
+
     notes.value.push({
       id: Math.floor(Math.random() * 1000000),
       text: newNote.value,
@@ -27,8 +37,7 @@ function getRandomColor() {
       backgroundColor: getRandomColor()
     });
 
-    isModalOpen.value = false;
-    newNote.value = "";
+    closeModal();
   } 
 </script>
 
@@ -40,26 +49,28 @@ function getRandomColor() {
         <button class="add-button" @click="openModal">+</button>
       </header>
       <div class="cards-container">
-        <div class="card">
-          <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
-          <p class="date">07/20/2022</p>
-        </div>
-                <div class="card">
-          <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
-          <p class="date">07/20/2022</p>
+        <div 
+          v-for="note in notes" 
+          :key="note.id"
+          class="card" 
+          :style="{ backgroundColor: note.backgroundColor }"
+        >
+          <p class="main-text">{{ note.text }}</p>
+          <p class="date">{{ new Date(note.date).toLocaleDateString("en-US") }}</p>
         </div>
       </div>
     </div>
-    
+
     <div v-if="isModalOpen" class="modal-overlay">
       <div class="modal">
         <h2>Create Note</h2>
-        <textarea 
-          placeholder="Enter your note here..." 
-          cols="30" 
+        <textarea
+          placeholder="Enter your note here..."
+          cols="30"
           rows="10"
-          v-model="newNote"
-          ></textarea>
+          v-model.trim="newNote"
+        ></textarea>
+        <span class="error-message" v-if="errorMessage">{{ errorMessage }}</span>
         <button class="modal-button" @click="addNote">Save</button>
         <button @click="closeModal" class="modal-button cancel-button">Cancel</button>
       </div>
@@ -72,14 +83,12 @@ main {
   height: 100vh;
   width: 100vw;
   display: flex;
-  justify-content: center;
-  align-items: center;
   background: linear-gradient(135deg, #ece9e6, #ffffff);
   font-family: Arial, sans-serif;
 }
 
 .container {
-  max-width: 600px;
+  max-width: 1200px; /* Increased width for more columns */
   width: 100%;
   padding: 20px;
   background: white;
@@ -116,8 +125,8 @@ h1 {
 }
 
 .cards-container {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 10px;
 }
 
@@ -126,6 +135,9 @@ h1 {
   padding: 15px;
   border-radius: 5px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  word-wrap: break-word; 
+  overflow-wrap: break-word;
+  white-space: normal; 
 }
 
 .main-text {
@@ -201,5 +213,11 @@ textarea {
 
 .cancel-button:hover {
   background: #999;
+}
+
+.error-message {
+  color: tomato;
+  display: flex;
+  margin-bottom: 10px;
 }
 </style>

@@ -24,6 +24,10 @@
           <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
           <p class="date"></p>
         </div>
+                <div class="card">
+          <p class="main-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat nesciunt architecto hic. Sit dignissimos repudiandae quae commodi reprehenderit nihil dolores explicabo debitis. Nam, nostrum architecto dolore. Dolore laboriosam fugit blanditiis.</p>
+          <p class="date"></p>
+        </div>
       </div>
     </div>
     
